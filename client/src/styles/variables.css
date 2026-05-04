@@ -1,0 +1,57 @@
+:root {
+  /* ── Background ─────────────────────────────── */
+  --bg:            #0a0a12;
+  --bg-secondary:  #0d0d1a;
+  --bg-elevated:   #10101f;
+
+  /* ── Purple Palette ─────────────────────────── */
+  --purple-500:  #8b5cf6;
+  --purple-400:  #a855f7;
+  --purple-300:  #c084fc;
+  --purple-200:  #d8b4fe;
+  --purple-glow: rgba(139, 92, 246, 0.35);
+  --purple-dim:  rgba(139, 92, 246, 0.12);
+
+  /* ── Text ───────────────────────────────────── */
+  --text-primary:  #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted:    #64748b;
+
+  /* ── Status ─────────────────────────────────── */
+  --success:       #10b981;
+  --success-dim:   rgba(16, 185, 129, 0.15);
+  --danger:        #f43f5e;
+  --danger-dim:    rgba(244, 63, 94, 0.15);
+  --warning:       #f59e0b;
+  --warning-dim:   rgba(245, 158, 11, 0.15);
+
+  /* ── Borders ────────────────────────────────── */
+  --border:        rgba(139, 92, 246, 0.18);
+  --border-hover:  rgba(139, 92, 246, 0.5);
+
+  /* ── Glass cards ────────────────────────────── */
+  --glass-bg:      rgba(13, 8, 30, 0.75);
+  --glass-blur:    blur(18px);
+  --glass-border:  1px solid rgba(139, 92, 246, 0.2);
+
+  /* ── Shadows ────────────────────────────────── */
+  --shadow-card:   0 4px 24px rgba(0,0,0,0.45), 0 0 0 1px rgba(139,92,246,0.15);
+  --shadow-hover:  0 8px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(139,92,246,0.45), 0 0 24px rgba(139,92,246,0.18);
+  --shadow-btn:    0 0 24px rgba(139,92,246,0.45);
+
+  /* ── Typography ─────────────────────────────── */
+  --font: 'Inter', -apple-system, sans-serif;
+
+  /* ── Transitions ────────────────────────────── */
+  --tx-fast:  150ms ease;
+  --tx-base:  250ms ease;
+
+  /* ── Radii ──────────────────────────────────── */
+  --r-sm:  6px;
+  --r-md:  10px;
+  --r-lg:  14px;
+  --r-xl:  20px;
+
+  /* ── Sidebar width ──────────────────────────── */
+  --sidebar-w: 240px;
+}

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(pkill -f \"node index.js\")",
+      "Bash(pkill -f \"vite\")",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "PowerShell(gh --version 2>&1)",
+      "PowerShell(gh auth status 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Program Files\\\\GitHub CLI\"; gh --version 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Program Files\\\\GitHub CLI\"; gh auth status 2>&1)",
+      "PowerShell($env:PATH = $env:PATH + \";C:\\\\Program Files\\\\GitHub CLI\"; cd \"C:\\\\Users\\\\Alsax\\\\finance-dashboard\"; git init; git add .; git commit -m \"Initial commit: FinanceOS finance dashboard\"; gh repo create finance-dashboard --public --source=. --remote=origin --push 2>&1)"
+    ]
+  }
+}

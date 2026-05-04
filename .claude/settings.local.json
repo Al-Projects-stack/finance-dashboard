@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\Alsax\\\\finance-dashboard\" -Recurse -File | ForEach-Object { $_.FullName })",
+      "PowerShell(Get-Command psql -ErrorAction SilentlyContinue)",
+      "PowerShell(& psql --version 2>$null)",
+      "PowerShell($env:PGPASSWORD = \"12345\"; & \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\" -U postgres -c \"CREATE DATABASE finance_dashboard;\" 2>&1)"
+    ]
+  }
+}
