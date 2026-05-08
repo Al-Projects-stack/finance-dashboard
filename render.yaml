@@ -1,9 +1,8 @@
 services:
-  # ── Backend API ──────────────────────────────────────────────────────────────
   - type: web
-    name: finance-backend
+    name: finance-dashboard
     runtime: node
-    buildCommand: cd server && npm ci
+    buildCommand: cd client && npm ci && npm run build && cd ../server && npm ci
     startCommand: cd server && node index.js
     plan: free
     envVars:
@@ -17,18 +16,6 @@ services:
         generateValue: true
       - key: JWT_EXPIRES_IN
         value: 7d
-      - key: CLIENT_URL
-        sync: false   # set to finance-frontend URL after it deploys
-
-  # ── Frontend (static) ────────────────────────────────────────────────────────
-  - type: web
-    name: finance-frontend
-    runtime: static
-    buildCommand: cd client && npm ci && npm run build
-    staticPublishPath: ./client/dist
-    envVars:
-      - key: VITE_API_URL
-        sync: false   # set to finance-backend URL after it deploys
 
 databases:
   - name: finance-db
