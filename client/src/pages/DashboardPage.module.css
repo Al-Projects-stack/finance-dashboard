@@ -1,7 +1,8 @@
+/* Skill: consistent layout, responsive at 375/768/1024/1440px */
 .page {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
 }
 
 .loader {
@@ -11,50 +12,60 @@
   min-height: 60vh;
 }
 
+/* ── Page header ─────────────────────────────────────── */
 .header {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(139,92,246,0.1);
 }
 
 .title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--text-primary), var(--purple-300));
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-primary) 40%, var(--purple-300));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  line-height: 1.15;
 }
 
 .subtitle {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  font-weight: 400;
 }
 
+/* ── KPI Grid — skill: 4-col responsive ─────────────── */
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 14px;
 }
 
+/* ── Charts row ──────────────────────────────────────── */
 .chartsRow {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 16px;
+  grid-template-columns: 1.65fr 1fr;
+  gap: 14px;
 }
 
-.chartWide { /* cash flow takes more width */ }
-
-.chartSingle { /* full-width doughnut */ }
-
-@media (max-width: 1200px) {
+/* ── Responsive breakpoints ─────────────────────────── */
+@media (max-width: 1280px) {
   .kpiGrid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .chartsRow { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
+  .kpiGrid { grid-template-columns: repeat(2, 1fr); }
+  .title { font-size: 1.35rem; }
+}
+
+@media (max-width: 440px) {
   .kpiGrid { grid-template-columns: 1fr; }
 }

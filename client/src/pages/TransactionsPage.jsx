@@ -23,7 +23,7 @@ export default function TransactionsPage() {
       {showForm && <TransactionForm onClose={() => setShowForm(false)} />}
 
       <div className={styles.header}>
-        <div>
+        <div className={styles.titleGroup}>
           <h1 className={styles.title}>Transactions</h1>
           <span className={styles.count}>{total} total</span>
         </div>

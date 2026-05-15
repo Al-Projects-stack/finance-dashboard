@@ -1,9 +1,16 @@
 /* ── Filters bar ─────────────────────────────────────── */
+/* Skill: form labels required, visible feedback on all inputs */
 .filters {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
+  padding: 16px 18px;
+  background: rgba(8,4,20,0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(139,92,246,0.14);
+  border-radius: var(--r-lg);
 }
 .filters input,
 .filters select {
@@ -12,49 +19,59 @@
   flex: 1;
 }
 
-/* ── Table ───────────────────────────────────────────── */
+/* ── Table wrapper — skill: overflow-x: auto for responsive ── */
 .tableWrap {
   overflow-x: auto;
   padding: 0;
 }
 
+/* ── Table ───────────────────────────────────────────── */
 .table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.875rem;
+  min-width: 640px;
 }
 
 .table thead {
-  background: rgba(139,92,246,0.08);
+  background: rgba(139,92,246,0.07);
+  border-bottom: 1px solid rgba(139,92,246,0.14);
 }
 
 .table th {
-  padding: 14px 18px;
+  padding: 13px 18px;
   text-align: left;
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: 0.68rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.09em;
   color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
 
 .table td {
-  padding: 14px 18px;
-  border-bottom: 1px solid rgba(139,92,246,0.07);
+  padding: 13px 18px;
+  border-bottom: 1px solid rgba(139,92,246,0.06);
   vertical-align: middle;
 }
 
-.row:hover td {
-  background: rgba(139,92,246,0.05);
+/* Skill: hover state on table rows with visual feedback */
+.row {
+  cursor: default;
+  transition: background var(--tx-fast);
 }
+.row:hover td { background: rgba(139,92,246,0.06); }
 .row:last-child td { border-bottom: none; }
 
-.date { color: var(--text-muted); font-size: 0.8rem; white-space: nowrap; }
+.date {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
 
 .desc {
-  max-width: 200px;
+  max-width: 220px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -62,49 +79,55 @@
 }
 
 .category {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   padding: 3px 10px;
   background: var(--purple-dim);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(139,92,246,0.2);
   border-radius: 20px;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--purple-300);
   white-space: nowrap;
 }
 
 .amount {
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
+/* Skill: cursor-pointer on action buttons */
 .actions {
   display: flex;
   gap: 6px;
   white-space: nowrap;
 }
 
-/* ── Pagination ──────────────────────────────────────── */
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 20px;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+.actionBtn {
+  opacity: 0.65;
+  transition: opacity var(--tx-fast), background var(--tx-fast), color var(--tx-fast);
 }
+.actionBtn:hover { opacity: 1; }
 
-/* ── Modal ───────────────────────────────────────────── */
+/* ── Modal overlay — skill: glassmorphism, backdrop blur ── */
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 200;
+  z-index: var(--z-modal);
   padding: 20px;
+  animation: overlayIn 200ms ease;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .modal {
@@ -114,29 +137,50 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  animation: modalIn 250ms ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modalHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.modalHeader h2 {
-  font-size: 1.1rem;
-  color: var(--purple-300);
+  padding-bottom: 4px;
 }
 
+.modalTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--text-primary), var(--purple-300));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.closeBtn {
+  color: var(--text-muted);
+}
+.closeBtn:hover {
+  color: var(--text-primary);
+}
+
+/* ── Form inside modal ───────────────────────────────── */
 .form {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* Skill: income = green CTA, expense = purple primary */
 .typeToggle {
   display: flex;
   gap: 8px;
 }
-.typeToggle .btn {
+.typeBtn {
   flex: 1;
   justify-content: center;
 }
@@ -147,6 +191,7 @@
   gap: 14px;
 }
 
+/* Skill: loading → disable button during async */
 .formActions {
   display: flex;
   gap: 10px;

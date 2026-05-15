@@ -7,7 +7,20 @@ const CATEGORIES = {
   income:  ['Salary', 'Freelance', 'Investment', 'Bonus', 'Other'],
 };
 
-const empty = { type: 'expense', category: 'Food', amount: '', description: '', date: new Date().toISOString().split('T')[0] };
+const empty = {
+  type: 'expense',
+  category: 'Food',
+  amount: '',
+  description: '',
+  date: new Date().toISOString().split('T')[0],
+};
+
+const CloseIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+);
 
 export default function TransactionForm({ editTarget, onClose }) {
   const { createTransaction, updateTransaction } = useTransactions();
@@ -49,28 +62,33 @@ export default function TransactionForm({ editTarget, onClose }) {
   const cats = CATEGORIES[form.type] || [];
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    /* Skill: modal overlay with backdrop blur */
+    <div className={styles.modalOverlay} onClick={onClose} role="dialog" aria-modal="true" aria-label={editTarget ? 'Edit transaction' : 'Add transaction'}>
       <div className={`glass-card ${styles.modal}`} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>{editTarget ? 'Edit Transaction' : 'Add Transaction'}</h2>
-          <button className="btn btn-ghost btn-icon" onClick={onClose}>✕</button>
+          <h2 className={styles.modalTitle}>{editTarget ? 'Edit Transaction' : 'New Transaction'}</h2>
+          {/* Skill: cursor-pointer, focus visible, SVG icon */}
+          <button className={`btn btn-ghost btn-icon ${styles.closeBtn}`} onClick={onClose} aria-label="Close">
+            <CloseIcon />
+          </button>
         </div>
 
+        {/* Skill: loading → error state visible near problem */}
         {error && <div className="error-msg">{error}</div>}
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          {/* Type toggle */}
+          {/* Type toggle — income uses green CTA per skill */}
           <div className={styles.typeToggle}>
             <button
               type="button"
-              className={`btn ${form.type === 'expense' ? 'btn-primary' : 'btn-ghost'}`}
+              className={`btn ${form.type === 'expense' ? 'btn-primary' : 'btn-ghost'} ${styles.typeBtn}`}
               onClick={() => { set('type', 'expense'); set('category', 'Food'); }}
             >
               Expense
             </button>
             <button
               type="button"
-              className={`btn ${form.type === 'income' ? 'btn-primary' : 'btn-ghost'}`}
+              className={`btn ${form.type === 'income' ? 'btn-cta' : 'btn-ghost'} ${styles.typeBtn}`}
               onClick={() => { set('type', 'income'); set('category', 'Salary'); }}
             >
               Income
@@ -79,25 +97,50 @@ export default function TransactionForm({ editTarget, onClose }) {
 
           <div className={styles.formGrid}>
             <div className="form-group">
-              <label>Amount (R)</label>
+              <label htmlFor="txn-amount">Amount (R)</label>
               <input
-                type="number" step="0.01" min="0.01" required
+                id="txn-amount"
+                type="number" step="0.01" min="0.01" max="1000000000" required
                 placeholder="0.00"
+                inputMode="decimal"
                 value={form.amount}
-                onChange={(e) => set('amount', e.target.value)}
+                onChange={(e) => {
+                  // Strip anything that isn't a digit or single dot
+                  const raw = e.target.value.replace(/[^0-9.]/g, '');
+                  const parts = raw.split('.');
+                  const clean = parts.length > 2
+                    ? parts[0] + '.' + parts.slice(1).join('')
+                    : raw;
+                  set('amount', clean);
+                }}
+                onKeyDown={(e) => {
+                  // Block e, E, +, - (valid in HTML number but not for money)
+                  if (['e', 'E', '+', '-'].includes(e.key)) e.preventDefault();
+                }}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  const pasted = e.clipboardData.getData('text');
+                  const numeric = pasted.replace(/[^0-9.]/g, '');
+                  const parts = numeric.split('.');
+                  const clean = parts.length > 2
+                    ? parts[0] + '.' + parts.slice(1).join('')
+                    : numeric;
+                  set('amount', clean);
+                }}
               />
             </div>
 
             <div className="form-group">
-              <label>Category</label>
-              <select value={form.category} onChange={(e) => set('category', e.target.value)}>
+              <label htmlFor="txn-category">Category</label>
+              <select id="txn-category" value={form.category} onChange={(e) => set('category', e.target.value)}>
                 {cats.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
 
             <div className="form-group">
-              <label>Date</label>
+              <label htmlFor="txn-date">Date</label>
               <input
+                id="txn-date"
                 type="date" required
                 value={form.date}
                 onChange={(e) => set('date', e.target.value)}
@@ -105,8 +148,9 @@ export default function TransactionForm({ editTarget, onClose }) {
             </div>
 
             <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-              <label>Description (optional)</label>
+              <label htmlFor="txn-desc">Description (optional)</label>
               <input
+                id="txn-desc"
                 type="text" maxLength={500}
                 placeholder="What was this for?"
                 value={form.description}
@@ -117,6 +161,7 @@ export default function TransactionForm({ editTarget, onClose }) {
 
           <div className={styles.formActions}>
             <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
+            {/* Skill: disable button during async, loading state */}
             <button type="submit" className="btn btn-primary" disabled={saving}>
               {saving ? 'Saving…' : (editTarget ? 'Update' : 'Add Transaction')}
             </button>

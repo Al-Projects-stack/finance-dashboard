@@ -1,3 +1,4 @@
+/* Skill: sticky nav must not obscure content — compensate for sidebar width */
 .layout {
   display: flex;
   min-height: 100vh;
@@ -9,6 +10,7 @@
   padding: 32px 36px;
   min-height: 100vh;
   overflow-x: hidden;
+  max-width: calc(100vw - var(--sidebar-w));
 }
 
 .fullCenter {
@@ -18,9 +20,11 @@
   min-height: 100vh;
 }
 
+/* Skill: responsive at 768px — collapse sidebar */
 @media (max-width: 768px) {
   .main {
     margin-left: 0;
     padding: 20px 16px;
+    max-width: 100vw;
   }
 }

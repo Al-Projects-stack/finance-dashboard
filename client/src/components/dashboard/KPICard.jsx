@@ -17,7 +17,7 @@ export default function KPICard({ title, value, icon, color = 'purple', format =
       <div className={styles.value}>{display}</div>
       {trend != null && (
         <div className={`${styles.trend} ${trend >= 0 ? styles.up : styles.down}`}>
-          {trend >= 0 ? '↑' : '↓'} {Math.abs(trend).toFixed(1)}% vs last month
+          {trend >= 0 ? '▲' : '▼'} {Math.abs(trend).toFixed(1)}% vs last month
         </div>
       )}
     </div>

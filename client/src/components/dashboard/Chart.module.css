@@ -1,24 +1,29 @@
+/* Skill: glassmorphism card, proper spacing for data charts */
 .chartCard {
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
+/* Skill: Line chart for trends — taller area for readability */
 .chartWrap {
   position: relative;
-  height: 240px;
+  height: 250px;
 }
 
+/* Skill: Donut — reserve taller area, legend on right */
 .doughnutWrap {
-  height: 260px;
+  height: 280px;
 }
 
 .noData {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   height: 100%;
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }

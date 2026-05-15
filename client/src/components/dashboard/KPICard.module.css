@@ -1,26 +1,45 @@
+/* Skill: glassmorphism card, glow effect, hover transition 150-300ms */
 .card {
-  padding: 24px;
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   position: relative;
   overflow: hidden;
+  transition: transform var(--tx-base), box-shadow var(--tx-base);
 }
+.card:hover { transform: translateY(-2px); }
 
+/* Ambient glow orb per color */
 .card::before {
   content: '';
   position: absolute;
-  top: -40px; right: -40px;
-  width: 120px; height: 120px;
+  top: -30px; right: -30px;
+  width: 100px; height: 100px;
   border-radius: 50%;
-  opacity: 0.06;
-  filter: blur(20px);
+  filter: blur(28px);
+  opacity: 0.1;
+  pointer-events: none;
 }
-
 .purple::before { background: var(--purple-400); }
 .green::before  { background: var(--success); }
 .red::before    { background: var(--danger); }
 
+/* Bottom accent line */
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 24px; right: 24px;
+  height: 1px;
+  opacity: 0;
+  transition: opacity var(--tx-base);
+}
+.card:hover::after { opacity: 1; }
+.purple.card::after { background: linear-gradient(90deg, transparent, var(--purple-500), transparent); }
+.green.card::after  { background: linear-gradient(90deg, transparent, var(--success), transparent); }
+.red.card::after    { background: linear-gradient(90deg, transparent, var(--danger), transparent); }
+
+/* ── Header ──────────────────────────────────────── */
 .header {
   display: flex;
   align-items: center;
@@ -28,32 +47,43 @@
 }
 
 .title {
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--text-muted);
 }
 
+/* Skill: SVG icon display */
 .icon {
-  font-size: 1.2rem;
-  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  opacity: 0.55;
+  transition: opacity var(--tx-fast);
 }
+.card:hover .icon { opacity: 0.85; }
+.purple .icon { color: var(--purple-300); }
+.green  .icon { color: var(--success); }
+.red    .icon { color: var(--danger); }
 
+/* ── Value ──────────────────────────────────────── */
 .value {
-  font-size: 1.9rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
-
-.purple .value { color: var(--purple-300); }
+.purple .value { color: var(--purple-200); }
 .green  .value { color: var(--success); }
 .red    .value { color: var(--danger); }
 
+/* ── Trend ──────────────────────────────────────── */
 .trend {
-  font-size: 0.78rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 .up   { color: var(--success); }
 .down { color: var(--danger); }

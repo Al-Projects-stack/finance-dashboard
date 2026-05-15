@@ -1,9 +1,13 @@
+/* Skill: Glassmorphism auth card — backdrop blur, subtle border, Z-depth */
 .page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
+  background-image:
+    radial-gradient(ellipse at 25% 25%, rgba(139,92,246,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 75%, rgba(34,197,94,0.06) 0%, transparent 50%);
 }
 
 .card {
@@ -12,60 +16,85 @@
   padding: 40px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 22px;
 }
 
+/* ── Logo ──────────────────────────────────────────── */
 .logo {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
+/* Skill: SVG icon display with glow */
 .logoIcon {
-  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: rgba(139,92,246,0.12);
+  border: 1px solid rgba(139,92,246,0.24);
   color: var(--purple-400);
-  filter: drop-shadow(0 0 12px var(--purple-glow));
-  display: block;
-  margin-bottom: 8px;
+  filter: drop-shadow(0 0 14px rgba(139,92,246,0.35));
 }
 
 .logoName {
-  font-size: 1.4rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--purple-300), var(--purple-500));
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--purple-200), var(--purple-500));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* ── Heading ────────────────────────────────────────── */
 .heading {
   text-align: center;
   font-size: 1rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-weight: 400;
+  line-height: 1.5;
 }
 
+/* ── Form ────────────────────────────────────────────── */
 .form {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
+/* Skill: full-width, loading state on submit */
 .submitBtn {
   width: 100%;
   justify-content: center;
   padding: 12px;
   font-size: 0.95rem;
+  font-weight: 600;
   margin-top: 4px;
 }
 
+/* ── Footer link ────────────────────────────────────── */
 .footer {
   text-align: center;
   font-size: 0.85rem;
   color: var(--text-muted);
 }
 
+/* Skill: cursor-pointer, hover feedback on link */
 .link {
   color: var(--purple-400);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  transition: color var(--tx-fast);
+  cursor: pointer;
 }
 .link:hover { color: var(--purple-300); }
+.link:focus-visible {
+  outline: 2px solid var(--purple-400);
+  outline-offset: 2px;
+  border-radius: 2px;
+}

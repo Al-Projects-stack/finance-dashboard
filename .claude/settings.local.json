@@ -4,7 +4,18 @@
       "PowerShell(Get-ChildItem \"c:\\\\Users\\\\Alsax\\\\finance-dashboard\" -Recurse -File | ForEach-Object { $_.FullName })",
       "PowerShell(Get-Command psql -ErrorAction SilentlyContinue)",
       "PowerShell(& psql --version 2>$null)",
-      "PowerShell($env:PGPASSWORD = \"12345\"; & \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\" -U postgres -c \"CREATE DATABASE finance_dashboard;\" 2>&1)"
+      "PowerShell($env:PGPASSWORD = \"12345\"; & \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\" -U postgres -c \"CREATE DATABASE finance_dashboard;\" 2>&1)",
+      "Bash(python scripts/search.py \"fintech personal finance dashboard SaaS dark elegant glassmorphism\" --design-system -p \"FinanceOS\")",
+      "Bash(python scripts/search.py \"finance dashboard landing hero social-proof\" --domain landing -n 3)",
+      "Bash(python scripts/search.py \"glassmorphism dark animation\" --domain ux -n 3)",
+      "Bash(python scripts/search.py \"react dashboard\" --stack react)",
+      "Bash(python scripts/search.py \"dashboard KPI cards data tables charts\" --domain ux -n 5)",
+      "Bash(python scripts/search.py \"fintech dashboard dark\" --domain style -n 3)",
+      "Bash(python scripts/search.py \"form login register auth\" --domain ux -n 4)",
+      "Bash(python scripts/search.py \"chart bar line donut financial data visualization\" --domain chart -n 5)",
+      "Bash(python scripts/search.py \"glassmorphism dark finance\" --domain style -n 1)",
+      "Bash(python scripts/search.py \"animation hover card interaction\" --domain ux -n 4)",
+      "Bash(python scripts/search.py \"react SaaS dashboard layout\" --stack react)"
     ]
   }
 }

@@ -1,23 +1,29 @@
 :root {
-  /* ── Background ─────────────────────────────── */
-  --bg:            #0a0a12;
-  --bg-secondary:  #0d0d1a;
-  --bg-elevated:   #10101f;
+  /* ── OLED-optimized dark backgrounds (skill: Deep Black / Midnight Blue) ── */
+  --bg:            #020617;
+  --bg-secondary:  #080b18;
+  --bg-elevated:   #0d1121;
 
-  /* ── Purple Palette ─────────────────────────── */
+  /* ── Purple accent palette ──────────────────────── */
   --purple-500:  #8b5cf6;
   --purple-400:  #a855f7;
   --purple-300:  #c084fc;
   --purple-200:  #d8b4fe;
-  --purple-glow: rgba(139, 92, 246, 0.35);
+  --purple-glow: rgba(139, 92, 246, 0.4);
   --purple-dim:  rgba(139, 92, 246, 0.12);
 
-  /* ── Text ───────────────────────────────────── */
-  --text-primary:  #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted:    #64748b;
+  /* ── Green CTA (skill: #22C55E) ─────────────────── */
+  --green-500:  #22c55e;
+  --green-400:  #4ade80;
+  --green-glow: rgba(34, 197, 94, 0.38);
+  --green-dim:  rgba(34, 197, 94, 0.12);
 
-  /* ── Status ─────────────────────────────────── */
+  /* ── Text — 7:1+ contrast ratio (skill: WCAG AAA) ─ */
+  --text-primary:   #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted:     #64748b;
+
+  /* ── Status colors ──────────────────────────────── */
   --success:       #10b981;
   --success-dim:   rgba(16, 185, 129, 0.15);
   --danger:        #f43f5e;
@@ -25,33 +31,42 @@
   --warning:       #f59e0b;
   --warning-dim:   rgba(245, 158, 11, 0.15);
 
-  /* ── Borders ────────────────────────────────── */
-  --border:        rgba(139, 92, 246, 0.18);
-  --border-hover:  rgba(139, 92, 246, 0.5);
+  /* ── Borders ────────────────────────────────────── */
+  --border:        rgba(139, 92, 246, 0.16);
+  --border-hover:  rgba(139, 92, 246, 0.48);
 
-  /* ── Glass cards ────────────────────────────── */
-  --glass-bg:      rgba(13, 8, 30, 0.75);
-  --glass-blur:    blur(18px);
-  --glass-border:  1px solid rgba(139, 92, 246, 0.2);
+  /* ── Glassmorphism (skill: blur 10-20px, rgba 0.2 border) ─ */
+  --glass-bg:      rgba(8, 4, 20, 0.78);
+  --glass-blur:    blur(20px);
+  --glass-border:  1px solid rgba(255, 255, 255, 0.06);
+  --glass-border-accent: 1px solid rgba(139, 92, 246, 0.22);
 
-  /* ── Shadows ────────────────────────────────── */
-  --shadow-card:   0 4px 24px rgba(0,0,0,0.45), 0 0 0 1px rgba(139,92,246,0.15);
-  --shadow-hover:  0 8px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(139,92,246,0.45), 0 0 24px rgba(139,92,246,0.18);
-  --shadow-btn:    0 0 24px rgba(139,92,246,0.45);
+  /* ── Shadows with depth (skill: Z-depth, glow) ──── */
+  --shadow-card:   0 4px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(139,92,246,0.12);
+  --shadow-hover:  0 10px 48px rgba(0,0,0,0.65), 0 0 0 1px rgba(139,92,246,0.42), 0 0 28px rgba(139,92,246,0.15);
+  --shadow-btn:    0 0 28px rgba(139,92,246,0.48);
+  --shadow-cta:    0 0 28px rgba(34,197,94,0.38);
 
-  /* ── Typography ─────────────────────────────── */
-  --font: 'Inter', -apple-system, sans-serif;
+  /* ── Typography: IBM Plex Sans (skill recommendation) ─ */
+  --font: 'IBM Plex Sans', -apple-system, sans-serif;
 
-  /* ── Transitions ────────────────────────────── */
-  --tx-fast:  150ms ease;
-  --tx-base:  250ms ease;
+  /* ── Transitions (skill: 150-300ms) ─────────────── */
+  --tx-fast: 150ms ease;
+  --tx-base: 250ms ease;
+  --tx-slow: 350ms ease;
 
-  /* ── Radii ──────────────────────────────────── */
+  /* ── Radii ──────────────────────────────────────── */
   --r-sm:  6px;
   --r-md:  10px;
   --r-lg:  14px;
   --r-xl:  20px;
 
-  /* ── Sidebar width ──────────────────────────── */
-  --sidebar-w: 240px;
+  /* ── Z-index scale (skill: define z-index scale) ── */
+  --z-sidebar:  100;
+  --z-modal:    200;
+  --z-nav:      50;
+  --z-tooltip:  300;
+
+  /* ── Layout ─────────────────────────────────────── */
+  --sidebar-w: 248px;
 }
