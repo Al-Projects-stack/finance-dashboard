@@ -1,5 +1,9 @@
 # FinanceOS
 
+**Live demo:** https://finance-dashboard-xu3i.onrender.com
+
+> Demo account: `demo@example.com` / `password123`
+
 A personal finance dashboard for tracking income, expenses, and cash flow. Built with React + Node.js + PostgreSQL.
 
 ## Features
