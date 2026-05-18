@@ -5,6 +5,8 @@
 > Demo account: `demo@example.com` / `password123`
 
 A personal finance dashboard for tracking income, expenses, and cash flow. Built with React + Node.js + PostgreSQL.
+<img width="1832" height="916" alt="image" src="https://github.com/user-attachments/assets/81d0a922-e1b1-43e5-8697-4d5527306fa5" />
+
 
 ## Features
 
