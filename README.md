@@ -112,3 +112,10 @@ finance-dashboard/
 | PUT    | /api/transactions/:id       | Update transaction       |
 | DELETE | /api/transactions/:id       | Delete transaction       |
 | GET    | /api/transactions/summary   | Dashboard summary data   |
+
+## What I Learned
+
+- Sharing auth and transaction state across multiple pages with React Context without reaching for a third-party state library
+- Building Chart.js visualizations that update live as the user changes date range and category filters, keeping the chart config declarative
+- Using Zod to validate data at the API boundary and sharing the same schemas between the Express backend and the React form
+- Implementing JWT auth end to end: bcrypt on register, token signing on login, and an Axios interceptor that attaches the Bearer header to every request
