@@ -72,10 +72,10 @@ Demo account: `demo@example.com` / `password123`
 ### 5. Run
 
 ```bash
-# Terminal 1 — API on http://localhost:5000
+# Terminal 1 API on http://localhost:5000
 cd server && npm run dev
 
-# Terminal 2 — UI on http://localhost:5173
+# Terminal 2 UI on http://localhost:5173
 cd client && npm run dev
 ```
 
