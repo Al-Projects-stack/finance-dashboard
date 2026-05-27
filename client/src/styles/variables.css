@@ -1,21 +1,29 @@
 :root {
-  /* ── Background ─────────────────────────────── */
-  --bg:            #0a0a12;
-  --bg-secondary:  #0d0d1a;
-  --bg-elevated:   #10101f;
+  /* ── Backgrounds ────────────────────────────── */
+  --bg:            #060611;
+  --bg-secondary:  #09091a;
+  --bg-elevated:   #0d0d20;
 
-  /* ── Purple Palette ─────────────────────────── */
+  /* ── Primary Purple ─────────────────────────── */
+  --purple-600:  #7c3aed;
   --purple-500:  #8b5cf6;
   --purple-400:  #a855f7;
   --purple-300:  #c084fc;
   --purple-200:  #d8b4fe;
-  --purple-glow: rgba(139, 92, 246, 0.35);
+  --purple-glow: rgba(139, 92, 246, 0.4);
   --purple-dim:  rgba(139, 92, 246, 0.12);
 
+  /* ── Cyan Accent ────────────────────────────── */
+  --cyan-500:    #06b6d4;
+  --cyan-400:    #22d3ee;
+  --cyan-300:    #67e8f9;
+  --cyan-glow:   rgba(6, 182, 212, 0.35);
+  --cyan-dim:    rgba(6, 182, 212, 0.1);
+
   /* ── Text ───────────────────────────────────── */
-  --text-primary:  #f1f5f9;
+  --text-primary:   #f1f5f9;
   --text-secondary: #94a3b8;
-  --text-muted:    #64748b;
+  --text-muted:     #64748b;
 
   /* ── Status ─────────────────────────────────── */
   --success:       #10b981;
@@ -29,29 +37,38 @@
   --border:        rgba(139, 92, 246, 0.18);
   --border-hover:  rgba(139, 92, 246, 0.5);
 
-  /* ── Glass cards ────────────────────────────── */
-  --glass-bg:      rgba(13, 8, 30, 0.75);
-  --glass-blur:    blur(18px);
-  --glass-border:  1px solid rgba(139, 92, 246, 0.2);
+  /* ── Glass ──────────────────────────────────── */
+  --glass-bg:     rgba(9, 7, 22, 0.82);
+  --glass-blur:   blur(20px);
+  --glass-border: 1px solid rgba(139, 92, 246, 0.18);
+
+  /* ── Gradients ──────────────────────────────── */
+  --grad-purple:  linear-gradient(135deg, #7c3aed, #a855f7);
+  --grad-cyan:    linear-gradient(135deg, #0891b2, #22d3ee);
+  --grad-success: linear-gradient(135deg, #059669, #10b981);
+  --grad-danger:  linear-gradient(135deg, #e11d48, #f43f5e);
+  --grad-text:    linear-gradient(135deg, #f1f5f9, #c084fc);
 
   /* ── Shadows ────────────────────────────────── */
-  --shadow-card:   0 4px 24px rgba(0,0,0,0.45), 0 0 0 1px rgba(139,92,246,0.15);
-  --shadow-hover:  0 8px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(139,92,246,0.45), 0 0 24px rgba(139,92,246,0.18);
-  --shadow-btn:    0 0 24px rgba(139,92,246,0.45);
+  --shadow-card:  0 4px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(139,92,246,0.1);
+  --shadow-hover: 0 12px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(139,92,246,0.4), 0 0 40px rgba(139,92,246,0.15);
+  --shadow-btn:   0 0 28px rgba(139,92,246,0.5);
 
   /* ── Typography ─────────────────────────────── */
-  --font: 'Inter', -apple-system, sans-serif;
+  --font:         'Inter', -apple-system, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
 
   /* ── Transitions ────────────────────────────── */
-  --tx-fast:  150ms ease;
-  --tx-base:  250ms ease;
+  --tx-fast: 150ms ease;
+  --tx-base: 260ms ease;
+  --tx-slow: 420ms ease;
 
   /* ── Radii ──────────────────────────────────── */
   --r-sm:  6px;
-  --r-md:  10px;
-  --r-lg:  14px;
-  --r-xl:  20px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  24px;
 
-  /* ── Sidebar width ──────────────────────────── */
-  --sidebar-w: 240px;
+  /* ── Sidebar ────────────────────────────────── */
+  --sidebar-w: 260px;
 }

@@ -1,19 +1,22 @@
 import { useState } from 'react';
+import { IconFilter } from '../Icons';
 import styles from './Transactions.module.css';
 
 export default function TransactionFilters({ onFilter }) {
-  const [form, setForm] = useState({ type: '', startDate: '', endDate: '', category: '' });
+  const [form, setForm] = useState({
+    type: '', startDate: '', endDate: '', category: '',
+  });
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
   const apply = (e) => {
     e.preventDefault();
-    const params = {};
-    if (form.type)      params.type      = form.type;
-    if (form.startDate) params.startDate = form.startDate;
-    if (form.endDate)   params.endDate   = form.endDate;
-    if (form.category)  params.category  = form.category;
-    onFilter({ ...params, page: 1 });
+    const p = {};
+    if (form.type)      p.type      = form.type;
+    if (form.startDate) p.startDate = form.startDate;
+    if (form.endDate)   p.endDate   = form.endDate;
+    if (form.category)  p.category  = form.category;
+    onFilter({ ...p, page: 1 });
   };
 
   const reset = () => {
@@ -23,6 +26,8 @@ export default function TransactionFilters({ onFilter }) {
 
   return (
     <form className={styles.filters} onSubmit={apply}>
+      <span className={styles.filterIcon}><IconFilter width={15} height={15} /></span>
+
       <select value={form.type} onChange={(e) => set('type', e.target.value)}>
         <option value="">All Types</option>
         <option value="income">Income</option>
@@ -31,16 +36,24 @@ export default function TransactionFilters({ onFilter }) {
 
       <input
         type="text"
-        placeholder="Category..."
+        placeholder="Filter by category…"
         value={form.category}
         onChange={(e) => set('category', e.target.value)}
       />
 
-      <input type="date" value={form.startDate} onChange={(e) => set('startDate', e.target.value)} />
-      <input type="date" value={form.endDate}   onChange={(e) => set('endDate', e.target.value)} />
+      <input
+        type="date"
+        value={form.startDate}
+        onChange={(e) => set('startDate', e.target.value)}
+      />
+      <input
+        type="date"
+        value={form.endDate}
+        onChange={(e) => set('endDate', e.target.value)}
+      />
 
-      <button type="submit" className="btn btn-primary btn-sm">Filter</button>
-      <button type="button" className="btn btn-ghost btn-sm" onClick={reset}>Reset</button>
+      <button type="submit"  className="btn btn-primary  btn-sm">Apply</button>
+      <button type="button"  className="btn btn-ghost    btn-sm" onClick={reset}>Reset</button>
     </form>
   );
 }

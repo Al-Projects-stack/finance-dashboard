@@ -1,7 +1,14 @@
+/* ── Page ───────────────────────────────────────────────── */
 .page {
   display: flex;
   flex-direction: column;
   gap: 28px;
+  animation: pageIn 0.45s ease both;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .loader {
@@ -11,50 +18,98 @@
   min-height: 60vh;
 }
 
+/* ── Header ─────────────────────────────────────────────── */
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.greetBlock {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--text-primary), var(--purple-300));
+.greetText {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f1f5f9 20%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
 }
 
-.subtitle {
+.dateText {
+  font-size: 0.875rem;
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-weight: 400;
 }
 
+/* Live pill */
+.livePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 24px;
+  background: rgba(139,92,246,0.08);
+  border: 1px solid rgba(139,92,246,0.2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--purple-300);
+  white-space: nowrap;
+}
+
+.liveDot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 10px var(--success);
+  animation: blink 2.2s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--success); }
+  50%       { opacity: 0.55; box-shadow: 0 0 18px var(--success); }
+}
+
+/* ── KPI grid ───────────────────────────────────────────── */
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
 
+.kpiItem {
+  animation: cardIn 0.45s ease both;
+  animation-delay: var(--delay, 0ms);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Charts ─────────────────────────────────────────────── */
 .chartsRow {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: 1.65fr 1fr;
   gap: 16px;
 }
 
-.chartWide { /* cash flow takes more width */ }
-
-.chartSingle { /* full-width doughnut */ }
-
+/* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 1200px) {
   .kpiGrid { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (max-width: 900px) {
   .chartsRow { grid-template-columns: 1fr; }
 }
-
 @media (max-width: 600px) {
-  .kpiGrid { grid-template-columns: 1fr; }
+  .kpiGrid   { grid-template-columns: 1fr; }
+  .greetText { font-size: 1.4rem; }
+  .livePill  { display: none; }
 }

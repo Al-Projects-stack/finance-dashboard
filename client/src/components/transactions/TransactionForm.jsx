@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTransactions } from '../../context/TransactionContext';
+import { IconX } from '../Icons';
 import styles from './Transactions.module.css';
 
 const CATEGORIES = {
@@ -7,12 +8,18 @@ const CATEGORIES = {
   income:  ['Salary', 'Freelance', 'Investment', 'Bonus', 'Other'],
 };
 
-const empty = { type: 'expense', category: 'Food', amount: '', description: '', date: new Date().toISOString().split('T')[0] };
+const empty = {
+  type:        'expense',
+  category:    'Food',
+  amount:      '',
+  description: '',
+  date:        new Date().toISOString().split('T')[0],
+};
 
 export default function TransactionForm({ editTarget, onClose }) {
   const { createTransaction, updateTransaction } = useTransactions();
-  const [form, setForm]   = useState(empty);
-  const [error, setError] = useState('');
+  const [form,   setForm]   = useState(empty);
+  const [error,  setError]  = useState('');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -39,7 +46,10 @@ export default function TransactionForm({ editTarget, onClose }) {
       else            await createTransaction(payload);
       onClose();
     } catch (err) {
-      const msg = err.response?.data?.error || err.response?.data?.details?.[0]?.message || 'Something went wrong';
+      const msg =
+        err.response?.data?.error ||
+        err.response?.data?.details?.[0]?.message ||
+        'Something went wrong';
       setError(msg);
     } finally {
       setSaving(false);
@@ -50,10 +60,16 @@ export default function TransactionForm({ editTarget, onClose }) {
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={`glass-card ${styles.modal}`} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={`glass-card ${styles.modal}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
         <div className={styles.modalHeader}>
-          <h2>{editTarget ? 'Edit Transaction' : 'Add Transaction'}</h2>
-          <button className="btn btn-ghost btn-icon" onClick={onClose}>✕</button>
+          <h2>{editTarget ? 'Edit Transaction' : 'New Transaction'}</h2>
+          <button className="btn btn-ghost btn-icon" onClick={onClose}>
+            <IconX />
+          </button>
         </div>
 
         {error && <div className="error-msg">{error}</div>}
@@ -116,9 +132,11 @@ export default function TransactionForm({ editTarget, onClose }) {
           </div>
 
           <div className={styles.formActions}>
-            <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
+            <button type="button" className="btn btn-ghost" onClick={onClose}>
+              Cancel
+            </button>
             <button type="submit" className="btn btn-primary" disabled={saving}>
-              {saving ? 'Saving…' : (editTarget ? 'Update' : 'Add Transaction')}
+              {saving ? 'Saving…' : editTarget ? 'Update' : 'Add Transaction'}
             </button>
           </div>
         </form>
