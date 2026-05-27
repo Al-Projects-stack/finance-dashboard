@@ -1,3 +1,11 @@
+/* ── Tilt shine overlay ─────────────────────────────────── */
+.shine {
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  pointer-events: none; z-index: 5;
+  transition: background .1s ease;
+}
+
 /* ── Card shell ─────────────────────────────────────────── */
 .card {
   padding: 22px 24px;

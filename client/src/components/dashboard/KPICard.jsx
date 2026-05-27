@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import styles from './KPICard.module.css';
 
 /* ── Animated count-up hook ──────────────────────────────── */
@@ -76,26 +76,47 @@ export default function KPICard({
 }) {
   const cfg    = CFG[color] ?? CFG.purple;
   const numRef = useCountUp(value ?? 0);
+  const cardRef  = useRef(null);
+  const shineRef = useRef(null);
 
   /* After count-up, format the final value as text */
   useEffect(() => {
     const el = numRef.current;
     if (!el) return;
-
     const observer = new MutationObserver(() => {
       const raw = Number(el.dataset.val);
       if (format === 'currency') el.textContent = fmtNum(raw);
       else if (format === 'percent') el.textContent = `${raw.toFixed(1)}%`;
       else el.textContent = raw;
     });
-
     observer.observe(el, { attributeFilter: ['data-val'] });
     return () => observer.disconnect();
   }, [format]);
 
+  /* 3-D tilt + shine on mouse-move */
+  const onMove = useCallback((e) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const b  = el.getBoundingClientRect();
+    const x  = (e.clientX - b.left) / b.width  - .5;
+    const y  = (e.clientY - b.top)  / b.height - .5;
+    el.style.transform = `perspective(700px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-4px) scale(1.02)`;
+    if (shineRef.current)
+      shineRef.current.style.background =
+        `radial-gradient(circle at ${(x+.5)*100}% ${(y+.5)*100}%, rgba(255,255,255,0.07) 0%, transparent 60%)`;
+  }, []);
+
+  const onLeave = useCallback(() => {
+    if (cardRef.current)  cardRef.current.style.transform   = '';
+    if (shineRef.current) shineRef.current.style.background = '';
+  }, []);
+
   return (
     <div
+      ref={cardRef}
       className={styles.card}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
       style={{
         '--c-gradient': cfg.gradient,
         '--c-glow':     cfg.glow,
@@ -103,8 +124,12 @@ export default function KPICard({
         '--c-icon-bg':  cfg.iconBg,
         '--c-icon-bdr': cfg.iconBorder,
         '--c-value':    cfg.color,
+        transition: 'transform .12s ease, box-shadow var(--tx-base)',
       }}
     >
+      {/* Shine overlay */}
+      <div ref={shineRef} className={styles.shine} />
+
       {/* Top accent stripe */}
       <div className={styles.stripe} />
 
