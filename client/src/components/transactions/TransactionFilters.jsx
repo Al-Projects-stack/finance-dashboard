@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { IconFilter } from '../Icons';
 import styles from './Transactions.module.css';
 
+const MIN_DATE = '2000-01-01';
+const MAX_DATE = '2100-12-31';
+
 export default function TransactionFilters({ onFilter }) {
   const [form, setForm] = useState({
     type: '', startDate: '', endDate: '', category: '',
@@ -38,6 +41,8 @@ export default function TransactionFilters({ onFilter }) {
         type="text"
         placeholder="Filter by category…"
         value={form.category}
+        maxLength={100}
+        aria-label="Filter by category"
         onChange={(e) => set('category', e.target.value)}
       />
 

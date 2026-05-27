@@ -1,6 +1,12 @@
 # FinanceOS
 
+**Live demo:** https://finance-dashboard-xu3i.onrender.com
+
+> Demo account: `demo@example.com` / `password123`
+
 A personal finance dashboard for tracking income, expenses, and cash flow. Built with React + Node.js + PostgreSQL.
+<img width="1832" height="916" alt="image" src="https://github.com/user-attachments/assets/81d0a922-e1b1-43e5-8697-4d5527306fa5" />
+
 
 ## Features
 
@@ -66,10 +72,10 @@ Demo account: `demo@example.com` / `password123`
 ### 5. Run
 
 ```bash
-# Terminal 1 — API on http://localhost:5000
+# Terminal 1 API on http://localhost:5000
 cd server && npm run dev
 
-# Terminal 2 — UI on http://localhost:5173
+# Terminal 2 UI on http://localhost:5173
 cd client && npm run dev
 ```
 
@@ -106,3 +112,10 @@ finance-dashboard/
 | PUT    | /api/transactions/:id       | Update transaction       |
 | DELETE | /api/transactions/:id       | Delete transaction       |
 | GET    | /api/transactions/summary   | Dashboard summary data   |
+
+## What I Learned
+
+- Sharing auth and transaction state across multiple pages with React Context without reaching for a third-party state library
+- Building Chart.js visualizations that update live as the user changes date range and category filters, keeping the chart config declarative
+- Using Zod to validate data at the API boundary and sharing the same schemas between the Express backend and the React form
+- Implementing JWT auth end to end: bcrypt on register, token signing on login, and an Axios interceptor that attaches the Bearer header to every request

@@ -4,10 +4,18 @@ import styles from './Chart.module.css';
 
 Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
+/* Skill: Donut for part-to-whole — max 5-6 contrasting colors, large slices first */
 const PALETTE = [
-  '#8b5cf6','#a855f7','#c084fc','#e879f9',
-  '#818cf8','#60a5fa','#34d399','#fbbf24',
-  '#f87171','#fb923c',
+  '#8b5cf6', // purple
+  '#22c55e', // green
+  '#f59e0b', // amber
+  '#60a5fa', // blue
+  '#f43f5e', // rose
+  '#34d399', // emerald
+  '#a78bfa', // violet light
+  '#fb923c', // orange
+  '#e879f9', // fuchsia
+  '#38bdf8', // sky
 ];
 
 export default function ExpenseCategoryChart({ categories = [] }) {
@@ -19,42 +27,51 @@ export default function ExpenseCategoryChart({ categories = [] }) {
 
     chartRef.current?.destroy();
 
+    /* Skill: large slices first */
+    const sorted = [...categories].sort((a, b) => b.total - a.total);
+
     chartRef.current = new Chart(canvasRef.current, {
       type: 'doughnut',
       data: {
-        labels: categories.map((c) => c.category),
+        labels: sorted.map((c) => c.category),
         datasets: [{
-          data: categories.map((c) => c.total),
-          backgroundColor: PALETTE.slice(0, categories.length),
-          borderColor: '#0a0a12',
+          data: sorted.map((c) => c.total),
+          backgroundColor: PALETTE.slice(0, sorted.length),
+          borderColor: '#020617',
           borderWidth: 3,
-          hoverOffset: 8,
+          hoverOffset: 10,
         }],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '68%',
+        cutout: '70%',
         plugins: {
           legend: {
             position: 'right',
             labels: {
               color: '#94a3b8',
-              font: { size: 11 },
+              font: { size: 11, family: "'IBM Plex Sans', sans-serif" },
               boxWidth: 10,
-              borderRadius: 3,
+              borderRadius: 4,
               padding: 14,
             },
           },
           tooltip: {
-            backgroundColor: 'rgba(10,8,24,0.95)',
+            backgroundColor: 'rgba(4,2,14,0.96)',
             titleColor: '#c084fc',
-            bodyColor: '#e2e8f0',
-            borderColor: 'rgba(139,92,246,0.35)',
+            bodyColor: '#f8fafc',
+            borderColor: 'rgba(139,92,246,0.32)',
             borderWidth: 1,
-            padding: 12,
+            padding: 14,
+            cornerRadius: 10,
+            titleFont: { family: "'IBM Plex Sans', sans-serif", weight: '600', size: 12 },
+            bodyFont:  { family: "'IBM Plex Sans', sans-serif", size: 13 },
             callbacks: {
-              label: (ctx) => ` R${ctx.raw.toLocaleString('en-ZA')} (${((ctx.raw / ctx.chart.getDatasetMeta(0).total) * 100).toFixed(1)}%)`,
+              label: (ctx) => {
+                const total = ctx.chart.getDatasetMeta(0).total ?? 1;
+                return ` R${ctx.raw.toLocaleString('en-ZA')} (${((ctx.raw / total) * 100).toFixed(1)}%)`;
+              },
             },
           },
         },
@@ -68,7 +85,9 @@ export default function ExpenseCategoryChart({ categories = [] }) {
     <div className={`glass-card ${styles.chartCard}`}>
       <h3 className="section-title">Expense Breakdown</h3>
       <div className={`${styles.chartWrap} ${styles.doughnutWrap}`}>
-        {categories.length ? <canvas ref={canvasRef} /> : <p className={styles.noData}>No expenses yet</p>}
+        {categories.length
+          ? <canvas ref={canvasRef} />
+          : <p className={styles.noData}>No expenses yet</p>}
       </div>
     </div>
   );

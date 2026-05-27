@@ -64,6 +64,7 @@
   gap: 2px;
 }
 
+/* Skill: cursor-pointer on all clickable, hover 150-300ms, focus visible */
 .navItem {
   display: flex;
   align-items: center;
@@ -183,6 +184,7 @@
   line-height: 1.4;
 }
 
+/* Skill: cursor-pointer, hover feedback, focus visible */
 .logoutBtn {
   background: none;
   border: 1px solid transparent;
@@ -200,4 +202,8 @@
   border-color: rgba(244,63,94,0.3);
   color: var(--danger);
   background: var(--danger-dim);
+}
+.logoutBtn:focus-visible {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
 }

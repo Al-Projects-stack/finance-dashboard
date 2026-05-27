@@ -2,7 +2,7 @@ services:
   - type: web
     name: finance-dashboard
     runtime: node
-    buildCommand: cd client && npm ci && npm run build && cd ../server && npm ci
+    buildCommand: cd client && npm ci --include=dev && npm run build && cd ../server && npm ci
     startCommand: cd server && node index.js
     plan: free
     envVars:

@@ -72,21 +72,22 @@ export default function TransactionForm({ editTarget, onClose }) {
           </button>
         </div>
 
+        {/* Skill: loading → error state visible near problem */}
         {error && <div className="error-msg">{error}</div>}
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          {/* Type toggle */}
+          {/* Type toggle — income uses green CTA per skill */}
           <div className={styles.typeToggle}>
             <button
               type="button"
-              className={`btn ${form.type === 'expense' ? 'btn-primary' : 'btn-ghost'}`}
+              className={`btn ${form.type === 'expense' ? 'btn-primary' : 'btn-ghost'} ${styles.typeBtn}`}
               onClick={() => { set('type', 'expense'); set('category', 'Food'); }}
             >
               Expense
             </button>
             <button
               type="button"
-              className={`btn ${form.type === 'income' ? 'btn-primary' : 'btn-ghost'}`}
+              className={`btn ${form.type === 'income' ? 'btn-cta' : 'btn-ghost'} ${styles.typeBtn}`}
               onClick={() => { set('type', 'income'); set('category', 'Salary'); }}
             >
               Income
@@ -95,25 +96,50 @@ export default function TransactionForm({ editTarget, onClose }) {
 
           <div className={styles.formGrid}>
             <div className="form-group">
-              <label>Amount (R)</label>
+              <label htmlFor="txn-amount">Amount (R)</label>
               <input
-                type="number" step="0.01" min="0.01" required
+                id="txn-amount"
+                type="number" step="0.01" min="0.01" max="1000000000" required
                 placeholder="0.00"
+                inputMode="decimal"
                 value={form.amount}
-                onChange={(e) => set('amount', e.target.value)}
+                onChange={(e) => {
+                  // Strip anything that isn't a digit or single dot
+                  const raw = e.target.value.replace(/[^0-9.]/g, '');
+                  const parts = raw.split('.');
+                  const clean = parts.length > 2
+                    ? parts[0] + '.' + parts.slice(1).join('')
+                    : raw;
+                  set('amount', clean);
+                }}
+                onKeyDown={(e) => {
+                  // Block e, E, +, - (valid in HTML number but not for money)
+                  if (['e', 'E', '+', '-'].includes(e.key)) e.preventDefault();
+                }}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  const pasted = e.clipboardData.getData('text');
+                  const numeric = pasted.replace(/[^0-9.]/g, '');
+                  const parts = numeric.split('.');
+                  const clean = parts.length > 2
+                    ? parts[0] + '.' + parts.slice(1).join('')
+                    : numeric;
+                  set('amount', clean);
+                }}
               />
             </div>
 
             <div className="form-group">
-              <label>Category</label>
-              <select value={form.category} onChange={(e) => set('category', e.target.value)}>
+              <label htmlFor="txn-category">Category</label>
+              <select id="txn-category" value={form.category} onChange={(e) => set('category', e.target.value)}>
                 {cats.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
 
             <div className="form-group">
-              <label>Date</label>
+              <label htmlFor="txn-date">Date</label>
               <input
+                id="txn-date"
                 type="date" required
                 value={form.date}
                 onChange={(e) => set('date', e.target.value)}
@@ -121,8 +147,9 @@ export default function TransactionForm({ editTarget, onClose }) {
             </div>
 
             <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-              <label>Description (optional)</label>
+              <label htmlFor="txn-desc">Description (optional)</label>
               <input
+                id="txn-desc"
                 type="text" maxLength={500}
                 placeholder="What was this for?"
                 value={form.description}

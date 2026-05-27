@@ -30,7 +30,9 @@
 .greetBlock {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(139,92,246,0.1);
 }
 
 .greetText {
@@ -82,7 +84,7 @@
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 14px;
 }
 
 .kpiItem {

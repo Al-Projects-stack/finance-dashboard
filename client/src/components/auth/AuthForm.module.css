@@ -119,6 +119,7 @@
   gap: 16px;
 }
 
+/* Skill: full-width, loading state on submit */
 .submitBtn {
   width: 100%;
   justify-content: center;
@@ -136,6 +137,7 @@
   color: var(--text-muted);
 }
 
+/* Skill: cursor-pointer, hover feedback on link */
 .link {
   color: var(--purple-400);
   text-decoration: none;

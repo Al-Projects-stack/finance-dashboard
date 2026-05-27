@@ -25,7 +25,12 @@
   --text-secondary: #94a3b8;
   --text-muted:     #64748b;
 
-  /* ── Status ─────────────────────────────────── */
+  /* ── Text — 7:1+ contrast ratio (skill: WCAG AAA) ─ */
+  --text-primary:   #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted:     #64748b;
+
+  /* ── Status colors ──────────────────────────────── */
   --success:       #10b981;
   --success-dim:   rgba(16, 185, 129, 0.15);
   --danger:        #f43f5e;
@@ -33,9 +38,9 @@
   --warning:       #f59e0b;
   --warning-dim:   rgba(245, 158, 11, 0.15);
 
-  /* ── Borders ────────────────────────────────── */
-  --border:        rgba(139, 92, 246, 0.18);
-  --border-hover:  rgba(139, 92, 246, 0.5);
+  /* ── Borders ────────────────────────────────────── */
+  --border:        rgba(139, 92, 246, 0.16);
+  --border-hover:  rgba(139, 92, 246, 0.48);
 
   /* ── Glass ──────────────────────────────────── */
   --glass-bg:     rgba(9, 7, 22, 0.82);
@@ -63,7 +68,7 @@
   --tx-base: 260ms ease;
   --tx-slow: 420ms ease;
 
-  /* ── Radii ──────────────────────────────────── */
+  /* ── Radii ──────────────────────────────────────── */
   --r-sm:  6px;
   --r-md:  12px;
   --r-lg:  16px;

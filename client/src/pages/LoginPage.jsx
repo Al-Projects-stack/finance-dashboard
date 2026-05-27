@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(form);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
     } finally {
@@ -46,19 +46,37 @@ export default function LoginPage() {
 
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Email</label>
+            <label htmlFor="login-email">Email</label>
             <input
+              id="login-email"
               type="email" required autoFocus
               placeholder="you@example.com"
+              maxLength={255}
+              inputMode="email"
+              autoComplete="email"
+              pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
               value={form.email}
-              onChange={(e) => set('email', e.target.value)}
+              onChange={(e) => {
+                // Strip characters that can never appear in a valid email
+                const clean = e.target.value.replace(/[^a-zA-Z0-9._%+\-@]/g, '');
+                set('email', clean);
+              }}
+              onPaste={(e) => {
+                e.preventDefault();
+                const pasted = e.clipboardData.getData('text');
+                const clean = pasted.trim().replace(/[^a-zA-Z0-9._%+\-@]/g, '');
+                set('email', clean);
+              }}
             />
           </div>
           <div className="form-group">
-            <label>Password</label>
+            <label htmlFor="login-password">Password</label>
             <input
+              id="login-password"
               type="password" required
               placeholder="••••••••"
+              maxLength={128}
+              autoComplete="current-password"
               value={form.password}
               onChange={(e) => set('password', e.target.value)}
             />

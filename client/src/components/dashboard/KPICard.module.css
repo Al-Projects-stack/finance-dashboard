@@ -20,6 +20,7 @@
   transform: translateY(-3px);
   box-shadow: var(--shadow-hover), 0 0 70px var(--c-glow, transparent);
 }
+.card:hover { transform: translateY(-2px); }
 
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(14px); }
@@ -90,7 +91,12 @@
   align-self: flex-start;
   margin-top: 3px;
 }
+.card:hover .icon { opacity: 0.85; }
+.purple .icon { color: var(--purple-300); }
+.green  .icon { color: var(--success); }
+.red    .icon { color: var(--danger); }
 
+/* ── Value ──────────────────────────────────────── */
 .value {
   font-family: var(--font-display);
   font-size: 2rem;
