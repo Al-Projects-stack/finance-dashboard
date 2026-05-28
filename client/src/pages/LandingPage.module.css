@@ -201,20 +201,26 @@
 /* each individual character */
 .cycleChar { display: inline-block; }
 
-/* EXIT: letters bubble up and float away, one by one */
+/* EXIT: letters wipe upward and fade, one by one
+   Uses clip-path so gradient text stays visible during animation */
 .cycleCharExit {
-  animation: charBubble 0.4s cubic-bezier(0.4, 0, 1, 1) both;
+  animation: charBubble 0.42s cubic-bezier(0.4, 0, 0.8, 1) both;
   pointer-events: none;
 }
 @keyframes charBubble {
-  0%   { opacity: 1;   transform: scale(1)    translateY(0);     filter: blur(0);    }
-  50%  { opacity: 0.6; transform: scale(1.5)  translateY(-14px); filter: blur(2px);  }
-  100% { opacity: 0;   transform: scale(2.0)  translateY(-28px); filter: blur(10px); }
+  0%   { opacity: 1;   clip-path: inset(0% 0 0% 0);   transform: scale(1)    translateY(0);   }
+  55%  { opacity: 0.4; clip-path: inset(0% 0 55% 0);  transform: scale(1.06) translateY(-5px); }
+  100% { opacity: 0;   clip-path: inset(0% 0 100% 0); transform: scale(1.12) translateY(-9px); }
 }
 
-/* ENTER: same charUp spring as "Finances" — slides up from below */
+/* ENTER: wipe in from below with spring — same spring feel as Finances
+   clip-path keeps text in gradient region; spring easing gives the bounce */
 .cycleCharEnter {
-  animation: charUp 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: charUpClip 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes charUpClip {
+  from { opacity: 0; clip-path: inset(100% 0 0% 0); transform: translateY(4px) rotate(4deg); }
+  to   { opacity: 1; clip-path: inset(0%   0 0% 0); transform: translateY(0)   rotate(0deg); }
 }
 
 /* Character animation */
