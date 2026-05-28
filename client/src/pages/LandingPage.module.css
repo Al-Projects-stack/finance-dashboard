@@ -201,25 +201,20 @@
 /* each individual character */
 .cycleChar { display: inline-block; }
 
-/* EXIT: dead CSS — letters are hidden instantly via React state (opacity:0) */
+/* EXIT: letters bubble up and float away, one by one */
 .cycleCharExit {
-  animation: charExit 0.31s cubic-bezier(0.55,0,1,0.45) both;
+  animation: charBubble 0.4s cubic-bezier(0.4, 0, 1, 1) both;
+  pointer-events: none;
 }
-@keyframes charExit {
-  from { opacity:1; transform:translateY(0)     scale(1)   rotate(0deg);  filter:blur(0);   }
-  to   { opacity:0; transform:translateY(-28px) scale(0.4) rotate(-10deg);filter:blur(7px); }
+@keyframes charBubble {
+  0%   { opacity: 1;   transform: scale(1)    translateY(0);     filter: blur(0);    }
+  50%  { opacity: 0.6; transform: scale(1.5)  translateY(-14px); filter: blur(2px);  }
+  100% { opacity: 0;   transform: scale(2.0)  translateY(-28px); filter: blur(10px); }
 }
 
-/* ENTER: drop from above — falls in, squishes on landing, springs back */
+/* ENTER: same charUp spring as "Finances" — slides up from below */
 .cycleCharEnter {
-  animation: charDrop 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-@keyframes charDrop {
-  0%   { opacity: 0; transform: translateY(-55px) scaleY(0.35) scaleX(1.3); filter: blur(8px) brightness(2.5); }
-  52%  { opacity: 1; transform: translateY(8px)   scaleY(1.18) scaleX(0.88); filter: blur(0)   brightness(1.4); }
-  70%  {             transform: translateY(-3px)  scaleY(0.94) scaleX(1.03); filter: brightness(1.1); }
-  85%  {             transform: translateY(2px)   scaleY(1.03) scaleX(0.99); }
-  100% { opacity: 1; transform: translateY(0)     scaleY(1)    scaleX(1);    filter: brightness(1); }
+  animation: charUp 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 /* Character animation */

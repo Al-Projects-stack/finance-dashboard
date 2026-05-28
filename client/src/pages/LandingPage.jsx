@@ -160,8 +160,8 @@ function Split({ text, delay = 0, cls }) {
 
 /* ══════════════════════════════════════════════════════════
    CYCLING HEADLINE WORD
-   Each letter shatters into particles one at a time,
-   then the new word springs in letter by letter.
+   Exit: each letter bubbles up and fades, left to right.
+   Enter: same charUp spring as "Finances", letter by letter.
 ══════════════════════════════════════════════════════════ */
 const CYCLE_WORDS = [
   'reimagined.',
@@ -173,184 +173,61 @@ const CYCLE_WORDS = [
   'transformed.',
 ];
 
-const P_COLS = [
-  '168,85,247','192,132,252','216,180,254',
-  '34,211,238','103,232,249','139,92,246',
-];
-
-const STAGGER = 60; // ms between each letter shattering
-
 function WordCycle() {
-  const canvasRef = useRef(null);
-  const parts     = useRef([]);
-  const rafId     = useRef(null);
-  const looping   = useRef(false);
-  const charRefs  = useRef([]);
-  const idxRef    = useRef(0);
-  const busy      = useRef(false);
-
+  const idxRef = useRef(0);
+  const busy   = useRef(false);
   const [displayIdx, setDisplayIdx] = useState(0);
-  const [phase,      setPhase]      = useState('idle'); // 'idle' | 'enter'
-  const [hiddenSet,  setHiddenSet]  = useState(new Set());
-  const hiddenRef = useRef(new Set());
+  const [phase,      setPhase]      = useState('idle'); // 'idle' | 'exit' | 'enter'
 
   const word  = CYCLE_WORDS[displayIdx];
   const chars = [...word];
 
-  /* fill-screen canvas */
-  useEffect(() => {
-    const resize = () => {
-      const c = canvasRef.current;
-      if (c) { c.width = window.innerWidth; c.height = window.innerHeight; }
-    };
-    resize();
-    window.addEventListener('resize', resize);
-    return () => window.removeEventListener('resize', resize);
-  }, []);
-
-  /* render loop */
-  const kickLoop = useCallback(() => {
-    if (looping.current) return;
-    looping.current = true;
-    const cv = canvasRef.current;
-    const loop = () => {
-      const ctx = cv.getContext('2d');
-      ctx.clearRect(0, 0, cv.width, cv.height);
-      parts.current = parts.current.filter(p => p.a > 0);
-      parts.current.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        p.vy += p.glow ? .045 : .13;
-        p.vx *= .97;
-        p.a  -= p.glow ? .011 : .022;
-        p.sz *= p.glow ? .992 : .976;
-        p.rot += p.rv;
-        ctx.save();
-        ctx.globalAlpha = Math.max(p.a, 0);
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot);
-        if (p.glow) {
-          const g = ctx.createRadialGradient(0,0,0,0,0,p.sz);
-          g.addColorStop(0,   `rgba(${p.col},${p.a})`);
-          g.addColorStop(.45, `rgba(${p.col},${p.a*.28})`);
-          g.addColorStop(1,   `rgba(${p.col},0)`);
-          ctx.fillStyle = g;
-          ctx.beginPath(); ctx.arc(0,0,p.sz,0,Math.PI*2); ctx.fill();
-        } else {
-          ctx.fillStyle = `rgba(${p.col},${p.a})`;
-          if (p.sq) ctx.fillRect(-p.sz/2,-p.sz*.38,p.sz,p.sz*.76);
-          else { ctx.beginPath(); ctx.arc(0,0,Math.max(p.sz*.5,.1),0,Math.PI*2); ctx.fill(); }
-        }
-        ctx.restore();
-      });
-      if (parts.current.length > 0) rafId.current = requestAnimationFrame(loop);
-      else looping.current = false;
-    };
-    rafId.current = requestAnimationFrame(loop);
-  }, []);
-
-  /* shatter one letter: particles originate inside its bounding box */
-  const shatterChar = useCallback((el) => {
-    if (!el) return;
-    const r  = el.getBoundingClientRect();
-    const cx = r.left + r.width  / 2;
-    const cy = r.top  + r.height / 2;
-
-    /* 22 shards spread across the letter rect, flying outward */
-    for (let i = 0; i < 22; i++) {
-      const px  = r.left + Math.random() * r.width;
-      const py  = r.top  + Math.random() * r.height;
-      const dx  = px - cx, dy = py - cy;
-      const dist = Math.hypot(dx, dy) || 1;
-      const spd  = Math.random() * 6 + 2;
-      parts.current.push({
-        x: px, y: py,
-        vx: (dx/dist) * spd + (Math.random()-.5) * 2,
-        vy: (dy/dist) * spd - Math.random() * 2.5,
-        a: 1, sz: Math.random() * 3 + .8,
-        col: P_COLS[Math.floor(Math.random() * P_COLS.length)],
-        rot: Math.random() * Math.PI * 2,
-        rv:  (Math.random() - .5) * .35,
-        sq:  Math.random() > .52,
-        glow: false,
-      });
-    }
-    /* 2 soft glow orbs bloom from the letter centre */
-    for (let i = 0; i < 2; i++) {
-      parts.current.push({
-        x: cx + (Math.random()-.5)*r.width*.4,
-        y: cy + (Math.random()-.5)*r.height*.4,
-        vx: (Math.random()-.5)*2,
-        vy: -(Math.random()*1.8+.4),
-        a: .65, sz: Math.random()*9+5,
-        col: Math.random()>.5 ? '168,85,247' : '34,211,238',
-        rot:0, rv:0, sq:false, glow:true,
-      });
-    }
-    kickLoop();
-  }, [kickLoop]);
-
-  /* run a full word swap */
   const triggerTransition = useCallback(() => {
     if (busy.current) return;
     busy.current = true;
 
-    const len = [...CYCLE_WORDS[idxRef.current]].length;
-    const els = charRefs.current.slice(0, len);
+    const len    = [...CYCLE_WORDS[idxRef.current]].length;
+    const EXIT_S = 42;   // ms stagger between letters bubbling out
+    const EXIT_D = 400;  // ms duration of bubble animation
 
-    /* shatter each letter one at a time, left to right */
-    els.forEach((el, i) => {
-      setTimeout(() => {
-        /* instantly hide this letter -- particles take its place */
-        hiddenRef.current = new Set(hiddenRef.current).add(i);
-        setHiddenSet(new Set(hiddenRef.current));
-        shatterChar(el);
-      }, i * STAGGER);
-    });
+    setPhase('exit');
 
-    /* once the last letter is gone, bring in the next word */
-    const switchAt = (len - 1) * STAGGER + 80;
     setTimeout(() => {
       idxRef.current = (idxRef.current + 1) % CYCLE_WORDS.length;
-      hiddenRef.current = new Set();
-      setHiddenSet(new Set());
       setDisplayIdx(idxRef.current);
       setPhase('enter');
 
-      /* unlock after the enter animation finishes */
       const newLen = [...CYCLE_WORDS[idxRef.current]].length;
       setTimeout(() => {
         setPhase('idle');
         busy.current = false;
-      }, (newLen - 1) * 28 + 750);
-    }, switchAt);
-  }, [shatterChar]);
+      }, (newLen - 1) * 32 + 750);
+    }, (len - 1) * EXIT_S + EXIT_D + 50);
+  }, []);
 
   useEffect(() => {
-    const tid = setInterval(triggerTransition, 3200);
-    return () => { clearInterval(tid); cancelAnimationFrame(rafId.current); };
+    const tid = setInterval(triggerTransition, 3800);
+    return () => clearInterval(tid);
   }, [triggerTransition]);
 
   return (
-    <>
-      <canvas ref={canvasRef}
-        style={{ position:'fixed', inset:0, pointerEvents:'none', zIndex:50 }} />
-      <span className={styles.cycleWordWrap} aria-live="polite" aria-label={word}>
-        {chars.map((ch, i) => (
-          <span
-            key={`${displayIdx}-${i}`}
-            ref={el => { charRefs.current[i] = el; }}
-            className={`${styles.cycleChar} ${phase === 'enter' ? styles.cycleCharEnter : ''}`}
-            style={{
-              opacity: hiddenSet.has(i) ? 0 : 1,
-              animationDelay: phase === 'enter' ? `${i * 28}ms` : '0ms',
-            }}
-            aria-hidden
-          >
-            {ch === ' ' ? ' ' : ch}
-          </span>
-        ))}
-      </span>
-    </>
+    <span className={styles.cycleWordWrap} aria-live="polite" aria-label={word}>
+      {chars.map((ch, i) => (
+        <span
+          key={`${displayIdx}-${i}`}
+          className={`${styles.cycleChar}${phase === 'exit' ? ` ${styles.cycleCharExit}` : ''}${phase === 'enter' ? ` ${styles.cycleCharEnter}` : ''}`}
+          style={{
+            animationDelay:
+              phase === 'exit'  ? `${i * 42}ms` :
+              phase === 'enter' ? `${i * 32}ms` :
+              '0ms',
+          }}
+          aria-hidden
+        >
+          {ch === ' ' ? ' ' : ch}
+        </span>
+      ))}
+    </span>
   );
 }
 
@@ -540,7 +417,7 @@ function MockCard({ fwdRef }) {
                 {k.fmt(k.raw)}
               </span>
               <span className={`${styles.mkpiTrend} ${k.trend >= 0 ? styles.mkpiUp : styles.mkpiDown}`}>
-                {k.trend >= 0 ? '↑' : '↓'} {Math.abs(k.trend)}%
+                {k.trend >= 0 ? '+' : ''}{Math.abs(k.trend)}%
               </span>
             </div>
           ))}
@@ -690,7 +567,7 @@ export default function LandingPage() {
         </Link>
         <div className={styles.navR}>
           <Link to="/login" className="btn btn-ghost btn-sm">Sign In</Link>
-          <Mag to="/register" className={`btn btn-primary btn-sm ${styles.navCta}`}>Get Started →</Mag>
+          <Mag to="/register" className={`btn btn-primary btn-sm ${styles.navCta}`}>Get Started</Mag>
         </div>
       </nav>
 
@@ -712,10 +589,7 @@ export default function LandingPage() {
 
         <div className={styles.ctas} data-sr style={{ '--delay':'160ms' }}>
           <Mag to="/register" className={`btn btn-primary ${styles.ctaMain}`} s={.5}>
-            <span>Start for Free</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
+            Start for Free
           </Mag>
           <Link to="/login" className={`btn btn-ghost ${styles.ctaGhost}`}>See Demo</Link>
         </div>
@@ -778,7 +652,7 @@ export default function LandingPage() {
           <h2 className={styles.btmH}>Start your financial journey today</h2>
           <p  className={styles.btmP}>Create a free account in under 60 seconds. No card required.</p>
           <Mag to="/register" className={`btn btn-primary ${styles.btmBtn}`} s={.35}>
-            Create Free Account →
+            Create Free Account
           </Mag>
         </div>
       </section>
