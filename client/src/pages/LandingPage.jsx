@@ -174,57 +174,44 @@ const CYCLE_WORDS = [
 ];
 
 function WordCycle() {
-  const idxRef = useRef(0);
-  const busy   = useRef(false);
-  const [displayIdx, setDisplayIdx] = useState(0);
-  const [phase,      setPhase]      = useState('idle'); // 'idle' | 'exit' | 'enter'
-
-  const word  = CYCLE_WORDS[displayIdx];
-  const chars = [...word];
-
-  const triggerTransition = useCallback(() => {
-    if (busy.current) return;
-    busy.current = true;
-
-    const len    = [...CYCLE_WORDS[idxRef.current]].length;
-    const EXIT_S = 42;   // ms stagger between letters bubbling out
-    const EXIT_D = 400;  // ms duration of bubble animation
-
-    setPhase('exit');
-
-    setTimeout(() => {
-      idxRef.current = (idxRef.current + 1) % CYCLE_WORDS.length;
-      setDisplayIdx(idxRef.current);
-      setPhase('enter');
-
-      const newLen = [...CYCLE_WORDS[idxRef.current]].length;
-      setTimeout(() => {
-        setPhase('idle');
-        busy.current = false;
-      }, (newLen - 1) * 32 + 750);
-    }, (len - 1) * EXIT_S + EXIT_D + 50);
-  }, []);
+  const [idx,     setIdx]     = useState(0);
+  const [tick,    setTick]    = useState(0);
+  const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const tid = setInterval(triggerTransition, 3800);
+    const INTERVAL   = 3000; // ms between word changes
+    const EXIT_DELAY = 600;  // ms to let the bubble animation finish
+
+    const tid = setInterval(() => {
+      // Step 1: mark as exiting — CSS .cycleWordExit overrides chars to charBubble
+      setExiting(true);
+      // Step 2: after exit animation, swap the word and bump tick to force remount
+      setTimeout(() => {
+        setIdx(i   => (i + 1) % CYCLE_WORDS.length);
+        setTick(t  => t + 1);
+        setExiting(false);
+      }, EXIT_DELAY);
+    }, INTERVAL);
+
     return () => clearInterval(tid);
-  }, [triggerTransition]);
+  }, []);
+
+  const word = CYCLE_WORDS[idx];
 
   return (
-    <span className={styles.cycleWordWrap} aria-live="polite" aria-label={word}>
-      {chars.map((ch, i) => (
+    <span
+      className={`${styles.cycleWordWrap}${exiting ? ` ${styles.cycleWordExit}` : ''}`}
+      aria-live="polite"
+      aria-label={word}
+    >
+      {[...word].map((ch, i) => (
         <span
-          key={`${displayIdx}-${i}`}
-          className={`${styles.cycleChar}${phase === 'exit' ? ` ${styles.cycleCharExit}` : ''}${phase === 'enter' ? ` ${styles.cycleCharEnter}` : ''}`}
-          style={{
-            animationDelay:
-              phase === 'exit'  ? `${i * 42}ms` :
-              phase === 'enter' ? `${i * 32}ms` :
-              '0ms',
-          }}
+          key={`${tick}-${i}`}
+          className={styles.cycleChar}
+          style={{ animationDelay: `${i * 35}ms` }}
           aria-hidden
         >
-          {ch === ' ' ? ' ' : ch}
+          {ch === ' ' ? ' ' : ch}
         </span>
       ))}
     </span>
