@@ -281,6 +281,18 @@ select option { background: #14103a; color: var(--text-primary); }
   50%       { opacity: 0.55; }
 }
 
+/* ── Landing page animations ── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Landing page Split char animation (referenced via inline style to avoid CSS module scoping) ── */
+@keyframes charUp {
+  from { opacity: 0; transform: translateY(110%) rotate(6deg); filter: blur(3px); }
+  to   { opacity: 1; transform: translateY(0)   rotate(0deg); filter: blur(0); }
+}
+
 .animate-fadeIn  { animation: fadeIn  0.35s ease both; }
 .animate-slideUp { animation: slideUp 0.4s  ease both; }
 .animate-scaleIn { animation: scaleIn 0.35s ease both; }

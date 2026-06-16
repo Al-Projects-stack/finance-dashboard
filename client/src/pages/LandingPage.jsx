@@ -150,8 +150,10 @@ function Split({ text, delay = 0, cls }) {
   return (
     <span className={cls} aria-label={text}>
       {[...text].map((c, i) => (
-        <span key={i} className={styles.ch} style={{ animationDelay:`${delay + i*32}ms` }} aria-hidden>
-          {c === ' ' ? ' ' : c}
+        <span key={i} className={styles.ch}
+          style={{ animation: `charUp .65s cubic-bezier(0.34,1.56,0.64,1) ${delay + i*32}ms both` }}
+          aria-hidden>
+          {c === ' ' ? '\u00A0' : c}
         </span>
       ))}
     </span>
@@ -159,9 +161,8 @@ function Split({ text, delay = 0, cls }) {
 }
 
 /* ══════════════════════════════════════════════════════════
-   CYCLING HEADLINE WORD
-   Exit: each letter bubbles up and fades, left to right.
-   Enter: same charUp spring as "Finances", letter by letter.
+   TYPEWRITER WORD CYCLE
+   Types characters one by one, pauses, erases, then types the next word.
 ══════════════════════════════════════════════════════════ */
 const CYCLE_WORDS = [
   'reimagined.',
@@ -174,46 +175,39 @@ const CYCLE_WORDS = [
 ];
 
 function WordCycle() {
-  const [idx,     setIdx]     = useState(0);
-  const [tick,    setTick]    = useState(0);
-  const [exiting, setExiting] = useState(false);
-
-  useEffect(() => {
-    const INTERVAL   = 3000; // ms between word changes
-    const EXIT_DELAY = 600;  // ms to let the bubble animation finish
-
-    const tid = setInterval(() => {
-      // Step 1: mark as exiting — CSS .cycleWordExit overrides chars to charBubble
-      setExiting(true);
-      // Step 2: after exit animation, swap the word and bump tick to force remount
-      setTimeout(() => {
-        setIdx(i   => (i + 1) % CYCLE_WORDS.length);
-        setTick(t  => t + 1);
-        setExiting(false);
-      }, EXIT_DELAY);
-    }, INTERVAL);
-
-    return () => clearInterval(tid);
-  }, []);
+  const [idx,          setIdx]          = useState(0);
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [phase,        setPhase]        = useState('typing');
 
   const word = CYCLE_WORDS[idx];
 
+  useEffect(() => {
+    if (phase === 'typing') {
+      if (visibleCount < word.length) {
+        const tid = setTimeout(() => setVisibleCount(c => c + 1), 55);
+        return () => clearTimeout(tid);
+      }
+      const tid = setTimeout(() => setPhase('erasing'), 1800);
+      return () => clearTimeout(tid);
+    }
+
+    if (phase === 'erasing') {
+      if (visibleCount > 0) {
+        const tid = setTimeout(() => setVisibleCount(c => c - 1), 30);
+        return () => clearTimeout(tid);
+      }
+      const tid = setTimeout(() => {
+        setIdx(i => (i + 1) % CYCLE_WORDS.length);
+        setPhase('typing');
+      }, 400);
+      return () => clearTimeout(tid);
+    }
+  }, [phase, visibleCount, word.length]);
+
   return (
-    <span
-      className={`${styles.cycleWordWrap}${exiting ? ` ${styles.cycleWordExit}` : ''}`}
-      aria-live="polite"
-      aria-label={word}
-    >
-      {[...word].map((ch, i) => (
-        <span
-          key={`${tick}-${i}`}
-          className={styles.cycleChar}
-          style={{ animationDelay: `${i * 35}ms` }}
-          aria-hidden
-        >
-          {ch === ' ' ? ' ' : ch}
-        </span>
-      ))}
+    <span className={styles.cycleWordWrap} aria-live="polite" aria-label={word}>
+      {word.slice(0, visibleCount)}
+      <span className={styles.cursor} style={{ animation: 'blink 0.7s step-end infinite' }}>|</span>
     </span>
   );
 }
