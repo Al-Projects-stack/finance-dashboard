@@ -90,6 +90,14 @@ if (isProd && fs.existsSync(CLIENT_DIST)) {
 /* ── Global error handler ───────────────────────────────────────────── */
 app.use(errorHandler);
 
-migrate().then(() => {
+migrate().then(async () => {
+  // One-time demo seed (SEED_DEMO=true). Runs AFTER migrate so tables exist.
+  if (process.env.SEED_DEMO === 'true') {
+    try {
+      await require('./seed')();
+    } catch (e) {
+      console.error('Boot seed skipped:', e.message);
+    }
+  }
   app.listen(PORT, () => console.log(`Server ready on port ${PORT}`));
 });

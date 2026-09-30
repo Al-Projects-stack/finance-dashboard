@@ -98,11 +98,14 @@ async function seed() {
   } catch (err) {
     await client.query('ROLLBACK');
     console.error('Seed failed:', err);
-    process.exit(1);
+    if (require.main === module) process.exit(1);
+    throw err;
   } finally {
     client.release();
     await pool.end();
   }
 }
 
-seed();
+module.exports = seed;
+
+if (require.main === module) seed();
