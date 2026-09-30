@@ -17,9 +17,19 @@ const CLIENT_DIST = path.join(__dirname, '../client/dist');
 async function migrate() {
   const schemaPath = path.join(__dirname, 'schema.sql');
   if (!fs.existsSync(schemaPath)) return;
+  // Internal Render hostnames (e.g. dpg-xxx-a) don't speak SSL;
+  // external ones (xxx.oregon-postgres.render.com) require it.
+  let ssl = false;
+  try {
+    ssl = new URL(process.env.DATABASE_URL).hostname.includes('.')
+      ? { rejectUnauthorized: false }
+      : false;
+  } catch {
+    ssl = isProd ? { rejectUnauthorized: false } : false;
+  }
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: isProd ? { rejectUnauthorized: false } : false,
+    ssl,
   });
   try {
     await pool.query(fs.readFileSync(schemaPath, 'utf8'));

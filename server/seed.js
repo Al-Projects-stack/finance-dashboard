@@ -2,7 +2,22 @@ require('dotenv').config();
 const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// Internal Render hostnames (e.g. dpg-xxx-a) don't speak SSL;
+// external ones (xxx.oregon-postgres.render.com) require it.
+function useSsl() {
+  if (process.env.PGSSLMODE === 'require') return true;
+  if (process.env.PGSSLMODE === 'disable') return false;
+  try {
+    return new URL(process.env.DATABASE_URL).hostname.includes('.');
+  } catch {
+    return false;
+  }
+}
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: useSsl() ? { rejectUnauthorized: false } : false,
+});
 
 const CATEGORIES_EXPENSE = ['Housing', 'Food', 'Transport', 'Entertainment', 'Health', 'Shopping', 'Utilities', 'Education'];
 const CATEGORIES_INCOME  = ['Salary', 'Freelance', 'Investment', 'Bonus', 'Other'];
